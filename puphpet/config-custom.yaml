@@ -1,0 +1,61 @@
+apache:
+    vhosts:
+        onlinejobs:
+            servername: onlinejobs.lcl
+            serveraliases:
+                - www.onlinejobs.lcl
+            docroot: /var/www/onlinejobs.ph
+            port: '80'
+            setenv:
+                - 'APP_ENV local'
+            setenvif:
+                - 'Authorization "(.*)" HTTP_AUTHORIZATION=$1'
+            custom_fragment: ''
+            ssl: '0'
+            ssl_cert: ''
+            ssl_key: ''
+            ssl_chain: ''
+            ssl_certs_dir: ''
+            ssl_protocol: ''
+            ssl_cipher: ''
+            directories:
+                avd_q7akrrrwj0vw:
+                    path: /var/www/onlinejobs.ph
+                    options:
+                        - Indexes
+                        - FollowSymlinks
+                        - MultiViews
+                    allow_override:
+                        - All
+                    require:
+                        - 'all granted'
+                    custom_fragment: ''
+                    files_match:
+                        avdfm_9j0oy6gp4l58:
+                            path: \.php$
+                            sethandler: 'proxy:fcgi://127.0.0.1:9000'
+                            custom_fragment: ''
+                            provider: filesmatch
+                    provider: directory
+perconadb:
+    install: '1'
+    install_server: '1'
+    settings:
+        version: '5.5'
+        root_password: '123'
+        override_options: {  }
+    adminer: '1'
+    users:
+        mysqlnu_fxtcjzzapi3e:
+            name: dbuser
+            password: '123'
+    databases:
+        db_onlinejobs:
+            name: onlinejobs
+            sql: ''
+    grants:
+        mysqlng_o53jxoq1fqdf:
+            user: dbuser
+            table: '*.*'
+            privileges:
+                - ALL
