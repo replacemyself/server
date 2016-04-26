@@ -19,10 +19,6 @@ class puphpet_perconadb (
   $root_username = 'root'
   $version = to_string($perconadb['settings']['version'])
 
-  #class { 'puphpet::perconadb':
-  #  version => $version,
-  #}
-
   $server_package = $puphpet::params::perconadb_package_server_name
   $client_package = $puphpet::params::perconadb_package_client_name
 
@@ -86,13 +82,6 @@ class puphpet_perconadb (
     }
   })
 
-  $settings = delete(deep_merge({
-    'package_name'     => $server_package,
-    'restart'          => true,
-    'override_options' => $override_options,
-    'service_name'     => 'mysql',
-  }, $perconadb['settings']), ['version', 'root_password'])
-
   $perconadb_user = $override_options['mysqld']['user']
 
   # Ensure the user exists
@@ -136,6 +125,11 @@ class puphpet_perconadb (
       $(dirname ${perconadb_pidfile})",
   }
 
+  $root_info = {
+    root_username => $root_username,
+    root_password => $root_password
+  }
+
   Mysql_user <| |>
   -> Mysql_database <| |>
   -> Mysql_grant <| |>
@@ -146,24 +140,26 @@ class puphpet_perconadb (
     default => { }
   }
 
-  #each( $users ) |$key, $user| {
-  #  # if no host passed with username, default to localhost
-  #  if '@' in $user['name'] {
-  #    $name = $user['name']
-  #  } else {
-  #    $name = "${user['name']}@localhost"
-  #  }
+  each( $users ) |$key, $user| {
+    # if no host passed with username, default to localhost
+    if '@' in $user['name'] {
+      $name = $user['name']
+    } else {
+      $name = "${user['name']}@localhost"
+    }
 
-  #  # force to_string to convert possible ints
-  #  $password_hash = mysql_password(to_string($user['password']))
+    # force to_string to convert possible ints
+    $password_hash = mysql_password(to_string($user['password']))
 
-  #  $merged = delete(merge($user, {
-  #    ensure          => 'present',
-  #    'password_hash' => $password_hash,
-  #  }), ['name', 'password'])
+    $merged = delete(merge($user, {
+      ensure   => 'present',
+      password => $password_hash,
+    }), ['name'])
 
-  #  create_resources( mysql_user, { "${name}" => $merged })
-  #}
+    create_resources( percona::user, {
+      "${name}" => $merged
+    }, $root_info)
+  }
 
   # config file could contain no databases key
   $databases = array_true($perconadb, 'databases') ? {
@@ -184,7 +180,9 @@ class puphpet_perconadb (
       ensure => 'present',
     }), ['name', 'sql', 'import_timeout'])
 
-    #create_resources( mysql_database, { "${name}" => $merged })
+    create_resources( percona::db, {
+      "${name}" => $merged
+    }, $root_info)
 
     if $sql != '' {
       # Run import only on initial database creation
@@ -226,12 +224,13 @@ class puphpet_perconadb (
     }
 
     $merged = merge($grant, {
-      ensure    => 'present',
-      'user'    => $user,
-      'options' => $options,
+      ensure  => 'present',
+      'user' => $user,
     })
 
-    #create_resources( mysql_grant, { "${name}" => $merged })
+    create_resources( percona::grants, {
+      "{$name}" => $merged
+    }, $root_info)
   }
 
   if $php_package == 'php' {
