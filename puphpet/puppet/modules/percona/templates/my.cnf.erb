@@ -1,0 +1,8 @@
+### File managed with puppet ###
+### Served by:        '<%= scope.lookupvar('::servername') %>'
+### Module:           '<%= scope.to_hash['module_name'] %>'
+<%= scope.function_percona_hash_print([@options]) %>
+
+<% if defined?(@config_includedir) and @config_includedir != :undef -%>
+!includedir <%= @config_includedir %>
+<% end -%>

@@ -1,0 +1,17 @@
+{
+  "name": "vStone-percona",
+  "version": "1.3.3",
+  "author": "Jan Vansteenkiste <jan@vstone.eu>",
+  "summary": "Manage mysql/percona server configuration",
+  "license": "Apache License Version 2.0",
+  "source": "https://github.com/vStone/puppet-percona",
+  "project_page": "https://github.com/vStone/puppet-percona",
+  "issues_url": "https://github.com/vStone/puppet-percona/issues",
+  "tags": [
+    "percona",
+    "mysql"
+  ],
+  "dependencies": [
+  
+  ]
+}
