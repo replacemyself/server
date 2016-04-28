@@ -261,6 +261,7 @@ php:
         error_reporting: '-1'
         session.save_path: /var/lib/php/session
         date.timezone: UTC
+        short_open_tag: 'On'
     fpm_ini:
         error_log: /var/log/php-fpm.log
     fpm_pools:
