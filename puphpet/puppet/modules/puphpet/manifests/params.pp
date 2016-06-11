@@ -61,21 +61,6 @@ class puphpet::params {
   }
 
   #########################################################
-  # PERCONADB
-  # @TODO: Added design and redhat
-  #########################################################
-
-  $perconadb_package_client_name = $::osfamily ? {
-    'Debian' => '',
-    'Redhat' => '',
-  }
-
-  $perconadb_package_server_name = $::osfamily ? {
-    'Debian' => '',
-    'Redhat' => '',
-  }
-
-  #########################################################
   # MISC
   #########################################################
 

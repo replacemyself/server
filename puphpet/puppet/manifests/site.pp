@@ -18,7 +18,6 @@ $mailhog        = hiera_hash('mailhog', {})
 $mariadb        = hiera_hash('mariadb', {})
 $mongodb        = hiera_hash('mongodb', {})
 $mysql          = hiera_hash('mysql', {})
-$perconadb      = hiera_hash('perconadb', {})
 $nginx          = $yaml['nginx']
 $nodejs         = hiera_hash('nodejs', {})
 $php            = hiera_hash('php', {})
@@ -96,16 +95,6 @@ if array_true($mailhog, 'install') {
 if array_true($mariadb, 'install') and ! array_true($mysql, 'install') {
   class { '::puphpet_mariadb':
     mariadb => $mariadb,
-    apache  => $apache,
-    nginx   => $nginx,
-    php     => $php,
-    hhvm    => $hhvm
-  }
-}
-
-if array_true($perconadb, 'install') and ! array_true($mysql, 'install') {
-  class { '::puphpet_perconadb':
-    perconadb => $perconadb,
     apache  => $apache,
     nginx   => $nginx,
     php     => $php,
