@@ -283,6 +283,7 @@ xdebug:
         xdebug.remote_enable: '1'
         xdebug.remote_handler: dbgp
         xdebug.remote_port: '9000'
+        xdebug.profiler_enable_trigger: '1'
 blackfire:
     install: '0'
     settings:
@@ -308,14 +309,14 @@ drush:
 ruby:
     install: '1'
     versions:
-        rv_m887799cqrdg:
+        rv_86s3cveypxsy:
             default: '1'
             bundler: '1'
-            version: 1.9.3
+            version: 2.3.0
             gems:
-                - deep_merge
-                - activesupport
-                - vine
+                - deep_merge@1.0.1
+                - activesupport@4.2.6
+                - vine@0.2
 python:
     install: '1'
     packages: {  }
