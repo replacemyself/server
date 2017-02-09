@@ -284,6 +284,7 @@ letsencrypt:
 php:
     install: '1'
     settings:
+        #version: '7.1'
         version: '5.5'
     modules:
         php:
