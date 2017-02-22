@@ -3,8 +3,8 @@ vagrantfile:
     vm:
         provider:
             local:
-                box: puphpet/centos7-x64
-                box_url: puphpet/centos7-x64
+                box: puphpet/centos65-x64
+                box_url: puphpet/centos65-x64
                 box_version: '0'
                 chosen_virtualizer: virtualbox
                 virtualizers:
@@ -20,10 +20,10 @@ vagrantfile:
                         update_guest_tools: 0
                 machines:
                     vflm_jk8uiyvggt8s:
-                        id: machine1
-                        hostname: machine1.puphpet
+                        id: replacemyself2
+                        hostname: replacemyself2.puphpet
                         network:
-                            private_network: 192.168.56.106
+                            private_network: 192.168.56.107
                             forwarded_port:
                                 vflmnfp_rvbintsqlp6e:
                                     host: '7577'
@@ -277,19 +277,43 @@ apache:
                     custom_fragment: ''
                     provider: filesmatch
 letsencrypt:
-    install: '1'
+    install: '0'
     settings:
         email: ''
     domains: {  }
 php:
     install: '1'
     settings:
-        version: '5.6'
+        version: '55'
     modules:
         php:
             - cli
             - intl
-            - xml
+            - mcrypt
+            - bcmath
+            - cgi
+            - common
+            - enchant
+            - fpm
+            - gd
+            - geoip
+            - gmp
+            - imap
+            - interbase
+            - ldap
+            - mbstring
+            - mysql
+            - mysqlnd
+            - odbc
+            - opcache
+            - pspell
+            - readline
+            - recode
+            - snmp
+            - tidy
+            - xcache
+            - xmlrpc
+            - xsl
         pear: {  }
         pecl: {  }
     ini:
@@ -434,7 +458,7 @@ mongodb:
         version: 2.6.0
     databases: {  }
 redis:
-    install: '1'
+    install: '0'
     settings:
         port: '6379'
 sqlite:
