@@ -1,29 +1,19 @@
 # -*- mode: ruby -*-
+# vi: set ft=ruby :
 
-dir = File.dirname(File.expand_path(__FILE__))
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = '2'
 
-require 'yaml'
-require "#{dir}/puphpet/ruby/deep_merge.rb"
-require "#{dir}/puphpet/ruby/to_bool.rb"
-require "#{dir}/puphpet/ruby/puppet.rb"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vbguest.auto_update = true
+  config.vbguest.no_remote = true
 
-configValues = YAML.load_file("#{dir}/puphpet/config.yaml")
+  config.vm.box = 'puphpet/centos65-x64'
+  config.vm.box_url = 'puphpet/centos65-x64'
 
-provider = ENV['VAGRANT_DEFAULT_PROVIDER'] ? ENV['VAGRANT_DEFAULT_PROVIDER'] : 'local'
-if File.file?("#{dir}/puphpet/config-#{provider}.yaml")
-  custom = YAML.load_file("#{dir}/puphpet/config-#{provider}.yaml")
-  configValues.deep_merge!(custom)
-end
+  config.vm.network :forwarded_port, guest: 80, host: 8082
+  config.vm.network :private_network, ip: '192.168.56.106'
+  config.vm.synced_folder './', '/var/www', :mount_options => ['dmode=755', 'fmode=0664'] 
 
-if File.file?("#{dir}/puphpet/config-custom.yaml")
-  custom = YAML.load_file("#{dir}/puphpet/config-custom.yaml")
-  configValues.deep_merge!(custom)
-end
-
-data = configValues['vagrantfile']
-
-Vagrant.require_version '>= 1.8.1'
-
-Vagrant.configure('2') do |config|
-  eval File.read("#{dir}/puphpet/vagrant/Vagrantfile-#{data['target']}")
+  config.vm.provision :shell, :path => 'shell/init.sh'
 end
