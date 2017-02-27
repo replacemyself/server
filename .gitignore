@@ -5,3 +5,4 @@ puphpet/config-custom.yaml
 !puphpet
 !README.md
 !Vagrantfile
+!shell
